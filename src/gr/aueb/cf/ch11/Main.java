@@ -6,6 +6,8 @@ public class Main {
         Student alice = new Student(); //Default constructor
         Student bob = new Student(); //Default constructor
         Student student = new Student();
+        Teacher teacher  = new Teacher();
+        Teacher teacher2 = new Teacher(1, "Μακης", "Καπετης");
 
         System.out.println("Student instances count " + Student.getStudentCount());
 
