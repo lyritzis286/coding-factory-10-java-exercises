@@ -104,7 +104,7 @@ public class Account {
             if (amount < 0) {
                 throw new IllegalArgumentException("Amount must be positive");
             }
-            if (isSsnValid(ssn)) {
+            if (!isSsnValid(ssn)) {
                 throw new IllegalArgumentException("SSN does not match account holder's SSN");
             }
             if (balance < amount) {
