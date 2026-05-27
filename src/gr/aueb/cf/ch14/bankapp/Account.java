@@ -96,11 +96,19 @@ public class Account {
 
     /**
      * Withdraw a specific amount of money from the account.
-     * @param amount    the amount of money to be withdrawn, must be positive and less than or equal to the current balance.
-     * @param ssn       the SSN of the account holder.
-     * @throws Exception if the amount is negative, the SSN does not match, or there are insufficient funds.
+     *
+     * @param amount
+     *              the amount of money to withdraw.
+     * @param ssn
+     *              the ssn of the account holder, must match the account holder's ssn.
+     * @throws NegativeAmountException
+     *          if the amount is negative.
+     * @throws SsnNotValidException
+     *          if the ssn does not match the account holder's ssn.*
+     * @throws InsufficientBalanceException
+     *          if the balance is not sufficient to cover the withdrawal amount.
      */
-    public void withdraw(double amount, String ssn)throws Exception {
+    public void withdraw(double amount, String ssn)throws NegativeAmountException, SsnNotValidException, InsufficientBalanceException {
         try {
             if (amount < 0) {
                 throw new NegativeAmountException("The amount = " + amount + " must not be negative");
