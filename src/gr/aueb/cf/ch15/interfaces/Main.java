@@ -11,6 +11,11 @@ public class Main {
 
         studentService.unregister();
         teacherService.unregister();
+
+        doRegister(studentService);
+        doRegister(teacherService);
+
+
     }
 
     //Agnostic
