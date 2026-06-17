@@ -77,7 +77,7 @@ public class Main {
 
                         accountController.withdraw(iban, withdrawAmount);
                         System.out.println("\nΕπιτυχής Ανάληψη");
-                        System.out.println("Ποσό κατάθεσης: " + withdrawAmount + ", Νέο Υπόλοιπο: "
+                        System.out.println("Ποσό ανάληψης: " + withdrawAmount + ", Νέο Υπόλοιπο: "
                                 + accountController.getBalance(iban));
 //
 
