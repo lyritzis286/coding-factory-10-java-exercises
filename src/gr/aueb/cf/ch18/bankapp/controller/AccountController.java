@@ -1,13 +1,20 @@
 package gr.aueb.cf.ch18.bankapp.controller;
 
+import gr.aueb.cf.ch18.bankapp.core.exceptions.AccountNotFoundException;
+import gr.aueb.cf.ch18.bankapp.core.exceptions.InsufficientBalanceException;
+import gr.aueb.cf.ch18.bankapp.core.exceptions.NegativeAmountException;
+import gr.aueb.cf.ch18.bankapp.core.exceptions.ValidationException;
+import gr.aueb.cf.ch18.bankapp.dto.AccountDepositDTO;
 import gr.aueb.cf.ch18.bankapp.dto.AccountInsertDTO;
 import gr.aueb.cf.ch18.bankapp.dto.AccountReadOnlyDTO;
-import gr.aueb.cf.ch18.bankapp.model.Account;
+import gr.aueb.cf.ch18.bankapp.dto.AccountWithdrawDTO;
 import gr.aueb.cf.ch18.bankapp.service.IAccountService;
+import gr.aueb.cf.ch18.bankapp.validation.Validator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AccountController {
     private final IAccountService accountService;
@@ -16,72 +23,76 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    // dummy
-    //private final List<Account> accounts = new ArrayList<>();
+    public AccountReadOnlyDTO createNewAccount(String iban, BigDecimal balance)
+            throws ValidationException , NegativeAmountException {
 
-    public AccountReadOnlyDTO createNewAccount(String iban, BigDecimal balance) {
         // Data binding
         AccountInsertDTO insertDTO = new AccountInsertDTO(iban, balance);
         AccountReadOnlyDTO readOnlyDTO;
 
-        // 1. Validation
+        // Validation
+        Map<String, String> errors = Validator.validateInsertDTO(insertDTO);
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors.toString());
+        }
 
         // 2. Service Call
-        //readOnlyDTO = accountService.createAccount(insertDTO);
+        readOnlyDTO = accountService.createNewAccount(insertDTO);
 
         // Dummy Data
-        readOnlyDTO = new AccountReadOnlyDTO(iban, balance);
+//        readOnlyDTO = new AccountReadOnlyDTO(iban, balance);
         return readOnlyDTO;
     }
 
-    public void deposit(String iban, BigDecimal amount) {
+    public void deposit(String iban, BigDecimal amount)
+            throws AccountNotFoundException,ValidationException, NegativeAmountException {
 
-        // 1. Validation
+        //Data Binding
+        AccountDepositDTO depositDTO = new AccountDepositDTO(iban, amount);
 
-        // Dummy Data
-        if (iban.equals("GR12345")) {
-            throw new IllegalArgumentException("Account with IBAN " + iban + " does not exist");
+        //Validation
+        Map<String, String> errors = Validator.validateDepositDTO(depositDTO);
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors.toString());
         }
 
         // Service Call
-        // accountService.deposit(iban, amount);
+        accountService.deposit(depositDTO);
     }
 
-    public void withdraw(String iban, BigDecimal amount) {
+    public void withdraw(String iban, BigDecimal amount)
+            throws ValidationException, AccountNotFoundException, InsufficientBalanceException, NegativeAmountException {
+        //Data binding
 
+        AccountWithdrawDTO withdrawDTO = new AccountWithdrawDTO(iban, amount);
         // 1. Validation
-
-        // Dummy Data
-        if (iban.equals("GR12345")) {
-            throw new IllegalArgumentException("Account with IBAN " + iban + " does not exist");
+        Map<String, String> validationErrors = Validator.validateWithdrawDTO(withdrawDTO, accountService.getBalance(iban));
+        if (!validationErrors.isEmpty()) {
+            throw new ValidationException(validationErrors.toString());
+        }
+        Map<String,String> balanceErrors = Validator.validateWithdrawDTO(withdrawDTO, accountService.getBalance(iban));
+        if (!balanceErrors.isEmpty()) {
+            throw new InsufficientBalanceException(balanceErrors.toString());
         }
 
+
         // Service Call
-        // accountService.withdraw(iban, amount);
+        accountService.withdraw(withdrawDTO);
     }
 
-    public BigDecimal getBalance(String iban) {
+    public BigDecimal getBalance(String iban) throws ValidationException, AccountNotFoundException {
 
-        // Dummy Data
-        if (iban.equals("GR12345")) {
-            throw new IllegalArgumentException("Account with IBAN " + iban + " does not exist");
+        //Validation
+        Map<String, String> errors = Validator.validateIban(iban);
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors.toString());
         }
-
-        return new BigDecimal("1000");
-
         // Service Call
-        //return accountService.getBalance(iban);
+        return accountService.getBalance(iban);
     }
 
     public List<AccountReadOnlyDTO> getAllAccounts() {
-
-        // Dummy Data
-        return List.of(new AccountReadOnlyDTO("GR12345", BigDecimal.valueOf(1000)),
-                new AccountReadOnlyDTO("GR12346", BigDecimal.valueOf(2000)),
-                new AccountReadOnlyDTO("GR12347", BigDecimal.valueOf(3000)),
-                new AccountReadOnlyDTO("GR12348", BigDecimal.valueOf(4000)));
-
         // Service Call
-        //return accountService.getAllAccounts();
+        return accountService.getAllAccounts();
     }
 }
