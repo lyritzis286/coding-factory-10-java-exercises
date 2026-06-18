@@ -70,7 +70,7 @@ public class AccountController {
         if (!validationErrors.isEmpty()) {
             throw new ValidationException(validationErrors.toString());
         }
-        Map<String,String> balanceErrors = Validator.validateWithdrawDTO(withdrawDTO, accountService.getBalance(iban));
+        Map<String,String> balanceErrors = Validator.validateWithdrawBalance(withdrawDTO, accountService.getBalance(iban));
         if (!balanceErrors.isEmpty()) {
             throw new InsufficientBalanceException(balanceErrors.toString());
         }

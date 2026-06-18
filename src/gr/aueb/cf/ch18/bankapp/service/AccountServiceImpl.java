@@ -30,7 +30,7 @@ public class AccountServiceImpl implements IAccountService {
         try {
 
 
-        if (accountInsertDTO.balance().compareTo(BigDecimal.ZERO) < 0) {
+            if (accountInsertDTO.balance().compareTo(BigDecimal.ZERO) < 0) {
             throw new NegativeAmountException("The initial balance " + accountInsertDTO.balance() +
                     " must not be negative");
         }
