@@ -125,7 +125,19 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public long count() {
-        return 0;
+        String sql = "SELECT COUNT(*) FROM accounts";
+
+        try (Connection conn = DBHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            return 0;
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Error getting accounts: " + e.getMessage());
+        }
     }
 
     @Override
