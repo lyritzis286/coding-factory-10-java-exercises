@@ -5,6 +5,7 @@ import gr.aueb.cf.ch18.bankapp_mysql.bankapp.core.DBHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +83,17 @@ public class AccountDAOImpl implements IAccountDAO {
     }
 
     @Override
-    public boolean isAccountExists(String iban) {
-        return false;
+    public boolean isAccountExists(String iban) throws SQLException {
+        String sql = "SELECT 1 FROM accounts WHERE IBAN = ?";
+
+        try (Connection conn = DBHelper.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, iban);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        }catch (SQLException e) {
+            throw new RuntimeException("Error checking if account exists");
+        }
     }
 }

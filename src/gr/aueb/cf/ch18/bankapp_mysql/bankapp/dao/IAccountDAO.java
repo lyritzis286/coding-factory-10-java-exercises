@@ -2,6 +2,7 @@ package gr.aueb.cf.ch18.bankapp_mysql.bankapp.dao;
 
 import gr.aueb.cf.ch18.bankapp.model.Account;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +14,5 @@ public interface IAccountDAO {
     long count();
 
     //Queries
-    boolean isAccountExists(String iban);
+    boolean isAccountExists (String iban) throws SQLException;
 }
