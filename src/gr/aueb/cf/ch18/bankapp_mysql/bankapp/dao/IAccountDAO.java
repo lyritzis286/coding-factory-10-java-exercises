@@ -14,5 +14,5 @@ public interface IAccountDAO {
     long count();
 
     //Queries
-    boolean isAccountExists (String iban) throws SQLException;
+    boolean isAccountExists (String iban);
 }

@@ -14,10 +14,14 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public Account saveOrUpdate(Account account) {
-        return null;
+        if (isAccountExists(account.getIban())) {
+            return update(account);
+        }else {
+            return insert(account);
+        }
     }
 
-    public Account insert(Account account) throws SQLException, RuntimeException {
+    public Account insert(Account account) {
         String sql = "INSERT INTO accounts(iban, balance) VALUES(?, ?)";
 
         try (Connection conn = DBHelper.getConnection();
@@ -40,7 +44,7 @@ public class AccountDAOImpl implements IAccountDAO {
 
     }
 
-    public Account update(Account account) throws SQLException {
+    public Account update(Account account) {
         String sql = "UPDATE accounts set balance = ? WHERE iban = ?";
 
         try (Connection conn = DBHelper.getConnection();
@@ -83,7 +87,7 @@ public class AccountDAOImpl implements IAccountDAO {
     }
 
     @Override
-    public boolean isAccountExists(String iban) throws SQLException {
+    public boolean isAccountExists(String iban) {
         String sql = "SELECT 1 FROM accounts WHERE IBAN = ?";
 
         try (Connection conn = DBHelper.getConnection();
