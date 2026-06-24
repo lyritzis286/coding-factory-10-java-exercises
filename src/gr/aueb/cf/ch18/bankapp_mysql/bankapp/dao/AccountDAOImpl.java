@@ -68,6 +68,15 @@ public class AccountDAOImpl implements IAccountDAO {
 
     @Override
     public void remove(String iban) {
+        String sql = "DELETE FROM accounts WHERE iban = ?";
+        try (Connection conn = DBHelper.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, iban);
+            pstmt.executeUpdate();
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Error deleting account: " + e.getMessage());
+        }
 
     }
 
