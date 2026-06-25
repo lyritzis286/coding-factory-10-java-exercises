@@ -1,6 +1,6 @@
 package gr.aueb.cf.ch18.bankapp_mysql.bankapp.dao;
 
-import gr.aueb.cf.ch18.bankapp.model.Account;
+import gr.aueb.cf.ch18.bankapp_mysql.bankapp.model.Account;
 
 import java.sql.SQLException;
 import java.util.List;
