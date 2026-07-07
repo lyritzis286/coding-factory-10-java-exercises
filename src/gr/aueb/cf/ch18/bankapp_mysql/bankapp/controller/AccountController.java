@@ -38,8 +38,7 @@ public class AccountController {
         // 2. Service Call
         readOnlyDTO = accountService.createNewAccount(insertDTO);
 
-        // Dummy Data
-//        readOnlyDTO = new AccountReadOnlyDTO(iban, balance);
+
         return readOnlyDTO;
     }
 
@@ -65,7 +64,7 @@ public class AccountController {
 
         AccountWithdrawDTO withdrawDTO = new AccountWithdrawDTO(iban, amount);
         // 1. Validation
-        Map<String, String> validationErrors = Validator.validateWithdrawDTO(withdrawDTO, accountService.getBalance(iban));
+        Map<String, String> validationErrors = Validator.validateWithdrawDTO(withdrawDTO);
         if (!validationErrors.isEmpty()) {
             throw new ValidationException(validationErrors.toString());
         }

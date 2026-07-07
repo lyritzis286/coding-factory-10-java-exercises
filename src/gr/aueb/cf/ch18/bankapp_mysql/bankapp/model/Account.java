@@ -36,7 +36,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "IBAN: " + iban + "Balance: " + balance;
+        return "IBAN: " + iban + " Balance: " + balance;
     }
 
     @Override

@@ -43,7 +43,7 @@ public class Validator {
         return errors;
     }
 
-    public static Map<String, String> validateWithdrawDTO(AccountWithdrawDTO withdrawDTO, BigDecimal balance) {
+    public static Map<String, String> validateWithdrawDTO(AccountWithdrawDTO withdrawDTO) {
         Map<String , String> errors = new HashMap<>();
 
         if (withdrawDTO.iban() == null || !withdrawDTO.iban().trim().matches("GR\\d{5,10}")) {
